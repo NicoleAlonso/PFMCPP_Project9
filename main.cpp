@@ -51,7 +51,50 @@ struct Wrapper
     { 
         std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
     }
+
+    void print()
+    {
+        std::cout << "Wrapper::print(" << val << ")" << std::endl;
+    }
+    
+private:
+    Type val{0};
+
 };
+
+    //I'm expecting to see a separate class definition entirely, like you did with the Numeric<double> in project 4.
+template<>
+struct Wrapper<Point>
+{
+    Wrapper(Point&& t) : val(std::move(t)) 
+    { 
+        std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
+    }
+
+    void print()
+    {
+        std::cout << "Wrapper::print(" << val.toString() << ")" << std::endl;
+    }
+    
+private:
+    Point val{0.0f, 0.0f};
+};
+
+
+template<typename T>
+void variadicHelper(T&& others)
+{
+    Wrapper<T>(std::forward<T>(others)).print(); 
+ 
+}
+
+template<typename T, typename ... Args>
+void variadicHelper(T&& first, Args&& ... everythingElse)
+{
+    Wrapper<T>(std::forward<T>(first)).print();
+    variadicHelper(std::forward<Args>(everythingElse)...); //are these passed by copy or... ?
+}
+
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
