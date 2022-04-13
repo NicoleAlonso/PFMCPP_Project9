@@ -62,39 +62,22 @@ private:
 
 };
 
-    //I'm expecting to see a separate class definition entirely, like you did with the Numeric<double> in project 4.
 template<>
-struct Wrapper<Point>
+void Wrapper<Point>::print()
 {
-    Wrapper(Point&& t) : val(std::move(t)) 
-    { 
-        std::cout << "Wrapper(" << typeid(val).name() << ")" << std::endl; 
-    }
-
-    void print()
-    {
-        std::cout << "Wrapper::print(" << val.toString() << ")" << std::endl;
-    }
-    
-private:
-    Point val{0.0f, 0.0f};
-};
-
-
-template<typename T>
-void variadicHelper(T&& others)
-{
-    Wrapper<T>(std::forward<T>(others)).print(); 
- 
+    std::cout << "Wrapper::print(" << val.toString() << ")" << std::endl;
 }
+
+void variadicHelper();
 
 template<typename T, typename ... Args>
 void variadicHelper(T&& first, Args&& ... everythingElse)
 {
     Wrapper<T>(std::forward<T>(first)).print();
-    variadicHelper(std::forward<Args>(everythingElse)...); //are these passed by copy or... ?
+    variadicHelper(std::forward<Args>(everythingElse)...); 
 }
 
+void variadicHelper() {}
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
@@ -113,6 +96,7 @@ void variadicHelper(T&& first, Args&& ... everythingElse)
 int main()
 {
     variadicHelper( 3, std::string("burgers"), 2.5, Point{3.f, 0.14f} );
+    //variadicHelper(2);
 }
 
 
